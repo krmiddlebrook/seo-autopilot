@@ -1,0 +1,32 @@
+#!/usr/bin/env python3
+"""Check every commit about to leave this clone, including binary files."""
+
+import os
+import shutil
+import subprocess
+import sys
+
+if not shutil.which("gitleaks"):
+    sys.exit("Install Gitleaks v8.30.1 or later to run the pre-push secret check.")
+
+for update in sys.stdin:
+    local_ref, tip, remote_ref, base = update.split()
+    if not tip.strip("0"):  # branch or tag deletion
+        continue
+    known_base = subprocess.run(["git", "cat-file", "-e", f"{base}^{{commit}}"], stderr=subprocess.DEVNULL)
+    revisions = f"{base}..{tip}" if known_base.returncode == 0 else tip
+
+    # Git's content diff can omit binary and empty files. Check the filenames in each commit as well.
+    paths = subprocess.check_output(["git", "log", "--full-history", "-m", "--no-renames", "--format=",
+                                     "--name-only", "--diff-filter=ACMT", "-z", revisions, "--"])
+    ignored = subprocess.run(["git", "check-ignore", "--no-index", "-z", "--stdin"], input=paths, stdout=subprocess.PIPE)
+    if ignored.returncode == 0:
+        for path in sorted(set(ignored.stdout.split(b"\0")) - {b""}):
+            print(f"Outgoing history contains ignored file {os.fsdecode(path)!r}", file=sys.stderr)
+        sys.exit(1)
+    if ignored.returncode != 1:
+        sys.exit(ignored.returncode)
+    scan = subprocess.run(["gitleaks", "git", "--redact=100", "--no-banner",
+                           f"--log-opts=--full-history -m {revisions}", "."], stdin=subprocess.DEVNULL)
+    if scan.returncode:
+        sys.exit(scan.returncode)

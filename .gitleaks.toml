@@ -1,0 +1,13 @@
+[extend]
+useDefault = true
+
+[[rules]]
+id = "seo-provider-credential"
+description = "Filled SEO Autopilot credential assignment"
+regex = '''(?im)^[ \t]*(?:DATAFORSEO_(?:LOGIN|PASSWORD)|SERPER_API_KEY|BRAVE_API_KEY|SEMRUSH_API_KEY|WP_RECEIVER_KEY|WP_APP_PASSWORD|GHOST_ADMIN_KEY|SHOPIFY_ADMIN_TOKEN|WEBHOOK_SECRET|POSTHOG_PERSONAL_API_KEY)[ \t]*=[ \t]*["\x27]?([^\s"\x27#$][^\s"\x27#]*)'''
+secretGroup = 1
+
+[[rules]]
+id = "private-site-file"
+description = "Local site settings, credentials or generated business data in a commit"
+path = '''(?i)(^|/)(\.env(?:\..*)?|[^/]+\.env|autopilot\.toml|(?:credentials|secrets|sites|reports|output)/.*|[^/]*(?:credentials|service[-_]account)[^/]*\.json|client_secret[^/]*\.json|[^/]*token\.json|[^/]+\.(?:db|sqlite3?)(?:-[^/]*)?|[^/]+\.(?:csv|pem|key|p12|log)|searxng/settings\.yml|content/blog/.*)$'''
