@@ -18,7 +18,7 @@ Give me the local report and the command to run the check again.
 
 SEO Autopilot is a free, open-source SEO content audit tool for people who run a business and write its website. It checks pages you already have and suggests specific edits for you to review. With PostHog connected, you can see which pages brought in inquiries from organic search.
 
-At Poway Wrestling, we used it to refresh our blog. Within a month we ranked first on Google for a local signup search and moved from 25th to 8th for a regional wrestling search. Six people asked to join through our website that month, up from our usual one or two. Four became customers. [Read how we did it](https://kaithedatadaddy.com/posts/fix-the-page-your-buyers-already-find) · [Get the free worksheet](https://kaithedatadaddy.com/resources/seo-page-fix#signup)
+At Poway Wrestling, we used it to refresh our blog. Within a month, we went from 9th to 1st on Google for a local signup search and from 25th to 8th for a regional wrestling search. Six people asked to join through our website that month, up from our usual one or two. Four became customers. [Read how we did it](https://kaithedatadaddy.com/posts/fix-the-page-your-buyers-already-find) · [Get the free worksheet](https://kaithedatadaddy.com/resources/seo-page-fix#signup)
 
 ## Improve the pages that bring you customers
 
