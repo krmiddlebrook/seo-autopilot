@@ -9,15 +9,26 @@ Open Claude Code or Codex on your computer and paste this into a new chat. All y
 ```text
 Set up SEO Autopilot for my website from https://github.com/krmiddlebrook/seo-autopilot
 Ask for my website address if you don't have it. Follow “First site setup” in the README.
-Install it and show me one SEO fix that could help more customers find me. Point to
-the page, tell me what you'd change, and explain why. Use my existing sign-in if you
-need a model. Keep paid SEO services off. Let me review any edit before it goes live.
+Install it and start with a page where customers book, buy, or sign up. Show me one
+SEO fix that could help more customers find that page. Tell me what you'd change and why.
+Use my existing sign-in if you need a model. Keep paid SEO services off.
+Let me review any edit before it goes live.
 Give me the local report and the command to run the check again.
 ```
 
-SEO Autopilot is a free, open-source SEO content audit tool for people who run a business and write its website. Pick a page where a customer can book, buy, or ask for a quote. Autopilot uses your Google Search Console queries and the pages that rank for them to suggest a specific edit. With PostHog connected, you can see which pages brought in inquiries from organic search.
+SEO Autopilot is a free, open-source SEO content audit tool for people who run a business and write its website. It checks pages you already have and suggests specific edits for you to review. With PostHog connected, you can see which pages brought in inquiries from organic search.
 
 At Poway Wrestling, we used it to refresh our blog. Within a month we ranked first on Google for a local signup search and moved from 25th to 8th for a regional wrestling search. Six people asked to join through our website that month, up from our usual one or two. Four became customers. [Read how we did it](https://kaithedatadaddy.com/posts/fix-the-page-your-buyers-already-find) · [Get the free worksheet](https://kaithedatadaddy.com/resources/seo-page-fix#signup)
+
+## Improve the pages that bring you customers
+
+Before you write another blog post, pick a handful of **money pages**. These are the pages where someone decides to book a class, buy a product, or ask for a quote. Give each one a search you want it to win. A parent searching for “beginner wrestling classes near me” has a reason to find your signup page. What would they still need to know before bringing their kid to practice?
+
+1. **Find the words buyers use.** In Google Search Console, filter the Search results report to one money page and open **Queries**. Pick a relevant search where people see your page but rarely click it. Write down its clicks and average position so you have a baseline. [How to read the Search Console report](https://support.google.com/webmasters/answer/7576553?hl=en)
+2. **Read the pages that outrank yours.** Search those words in the market you serve. If another club explains which ages can join and how to try a first class, look at your own signup page. Would a parent have to call you to find that out? Put the ages you teach and the practice times right next to the signup link. [Google’s guidance on useful content](https://developers.google.com/search/docs/fundamentals/creating-helpful-content)
+3. **Check whether the edit helped.** After Google has had time to pick up the change, compare average position and clicks for the same page and query over equal periods. Check whether the page brought in more signups or inquiries. If it keeps outranking competitors and bringing in customers, spend your next hour on another page.
+
+SEO Autopilot can do the audit for you. With Search Console connected, it finds queries your page already shows up for. With a search provider enabled, it reads the competing results. It suggests edits and flags any facts only you can supply. You decide what goes live. On later audits, you can see how the page performed for the same query. [Run a money-page audit](#core-page-audits)
 
 ## What can I do without an SEO subscription?
 
@@ -27,8 +38,6 @@ At Poway Wrestling, we used it to refresh our blog. Within a month we ranked fir
 | A free Soro alternative for writing SEO articles | Build a queue from Search Console and autocomplete. If a page already covers the topic, review a refresh. If the site needs a new article, review a researched draft and publish it to your CMS. |
 
 Surfer offers content audits and an editor. Soro offers scheduled article writing and publishing. SEO Autopilot covers those specific jobs on your own machine. The MIT-licensed software has no subscription fee. Use a local model via Ollama and self-host SearXNG for search results. You supply the machine and setup time. Paid services such as DataForSEO are optional. [Surfer Content Audit](https://docs.surferseo.com/en/articles/9182497-content-audit) · [Soro plans](https://trysoro.com/pricing)
-
-Try one page before installing anything. In Search Console, filter the Search results report to your booking page and open **Queries**. Pick a question the page leaves unanswered. Write down the answer you would give a customer over the phone. Once you've set up the project, use the same page for your [first audit](#core-page-audits).
 
 ```
 crawl → Brand DNA → topic queue (GSC striking distance + autocomplete + optional keyword metrics)
@@ -383,9 +392,9 @@ uv run autopilot facts resolve 3       # after editing a live CMS post by hand
 
 ## Core-page audits
 
-New articles only help if the pages that make money win their own searches. Once a day `autopilot run` audits one core page (the home page or a money page from `site.money_pages`): never-audited pages first, home before money pages, then whichever was audited longest ago. A page is not audited again within `audit.cooldown_days`.
+Add your booking, signup, or other high-value paths to `site.money_pages` and run `autopilot crawl` to pick them up. When you schedule `autopilot run` daily, it checks one eligible core page per run. It starts with pages it has never audited, gives the homepage priority among those, then returns to the page that has waited longest. The default wait between automatic audits of the same page is 14 days.
 
-For that page the audit pulls the last `audit.gsc_days` of Search Console queries for that exact URL, picks the top non-brand query as the target, looks at who ranks for it, and checks:
+With Search Console connected, the audit uses the last `audit.gsc_days` of queries for that URL and prioritizes a non-brand query with the most impressions. If query data is unavailable, it uses the page heading or title as a starting point. A configured search provider adds the top results for comparison. The audit checks:
 
 - whether the title, meta description and H1 contain the target query, and their lengths
 - thin content against the pages that rank above it
@@ -402,7 +411,7 @@ uv run autopilot audits done 4 --note "new title live"   # pings IndexNow, remin
 uv run autopilot audits dismiss 4
 ```
 
-After `done`, request indexing for the URL in Search Console (URL Inspection, then Request indexing); there's no API for that step. The next audit of the same page compares clicks, impressions, CTR and position with the earlier one, so you can see whether the change worked. A failed audit is logged and never stops the daily run.
+After `done`, request indexing for the URL in Search Console (URL Inspection, then Request indexing); there's no API for that step. With Search Console data, the next audit compares clicks, impressions, and average position for the earlier audit's query. A failed audit is logged and never stops the daily run.
 
 ```toml
 [audit]
