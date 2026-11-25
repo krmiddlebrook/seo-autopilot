@@ -2,6 +2,19 @@
 
 **What should I write so customers find me?**
 
+## Find your first SEO fix with one prompt
+
+Open Claude Code or Codex on your computer and paste this into a new chat. All you need to bring is your website address.
+
+```text
+Set up SEO Autopilot for my website from https://github.com/krmiddlebrook/seo-autopilot
+Ask for my website address if you don't have it. Follow “First site setup” in the README.
+Install it and show me one SEO fix that could help more customers find me. Point to
+the page, tell me what you'd change, and explain why. Use my existing sign-in if you
+need a model. Keep paid SEO services off. Let me review any edit before it goes live.
+Give me the local report and the command to run the check again.
+```
+
 SEO Autopilot is a free, open-source SEO content audit tool for people who run a business and write its website. Pick a page where a customer can book, buy, or ask for a quote. Autopilot uses your Google Search Console queries and the pages that rank for them to suggest a specific edit. With PostHog connected, you can see which pages brought in inquiries from organic search.
 
 At Poway Wrestling, we used it to refresh our blog. Within a month we ranked first on Google for a local signup search and moved from 25th to 8th for a regional wrestling search. Six people asked to join through our website that month, up from our usual one or two. Four became customers. [Read how we did it](https://kaithedatadaddy.com/posts/fix-the-page-your-buyers-already-find) · [Get the free worksheet](https://kaithedatadaddy.com/resources/seo-page-fix#signup)
@@ -38,6 +51,13 @@ uv sync --extra embeddings   # + sentence-transformers for internal link matchin
 ```
 
 Then run commands as `uv run autopilot ...` (or activate `.venv`).
+
+### First site setup
+
+1. Clone this repository or reuse a local copy. Install uv if needed, then run `uv sync --locked --no-dev` in the checkout. Create a separate local folder for the website so its settings and reports stay private.
+2. From the site folder, run `uv run --no-sync --project <checkout> autopilot init --url <website-url>`. Use the checkout's absolute path and the site's full URL. Reuse an existing config for this site if there is one. Run the remaining commands from the same folder with the same `uv run --no-sync --project <checkout> autopilot` prefix.
+3. For this first run, set `AUTOPILOT_SEARCH_PROVIDER=none` and `AUTOPILOT_METRICS_PROVIDER=none` in the command environment. Run `crawl`, then `health`. Save the output of `health --last` as `seo-health.txt` in the site folder. A partial check still has a report. Tell the owner which pages you could reach.
+4. For a suggested edit, use the owner's signed-in CLI. In `autopilot.toml`, set `[llm]` to `provider = "agent"` and `agents = ["claude"]` or `["codex"]` to match. Run `audits run --url <crawled-page-url>` on a page where a customer can book, buy, or get in touch. Share one finding, the proposed change, and the report in `output/audits/`. If the CLI is missing or signed out, share the health report now and explain how to enable the page audit. Keep publishing off for this first run.
 
 ## Quick start
 

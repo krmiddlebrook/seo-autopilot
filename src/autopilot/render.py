@@ -56,10 +56,11 @@ def schema_jsonld(draft: Draft, url: str, brand: dict[str, Any], image_url: str 
 
 
 def jsonld_script(schema: list[dict[str, Any]]) -> str:
-    return "\n".join(
-        f'<script type="application/ld+json">{json.dumps(s, ensure_ascii=False).replace("</", "<\\/")}</script>'
-        for s in schema
-    )
+    scripts = []
+    for item in schema:
+        payload = json.dumps(item, ensure_ascii=False).replace("</", "<\\/")
+        scripts.append(f'<script type="application/ld+json">{payload}</script>')
+    return "\n".join(scripts)
 
 
 PREVIEW = """<!doctype html>
